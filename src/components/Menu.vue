@@ -1,15 +1,15 @@
 <template>
   <div>
-    <v-navigation-drawer class="black" width="280" v-model="drawer" absolute>
+    <v-navigation-drawer class="grey lighten-4 elevation-3"  width="310" v-model="drawer" absolute>
       <div class="d-flex justify-center">
         <v-row>
           <v-list-item>
             <v-list-item-avatar>
-              <v-icon dark>mdi-account-circle</v-icon>
+              <v-icon color="black">mdi-account-circle</v-icon>
             </v-list-item-avatar>
 
             <v-list-item-content>
-              <v-list-item-title class="white--text letras">{{
+              <v-list-item-title class="black--text letras">{{
                 devolverUsuario.nombre
               }}</v-list-item-title>
             </v-list-item-content>
@@ -17,7 +17,7 @@
         </v-row>
       </div>
       <div class="d-flex justify-center">
-        <span class="white--text caption mb-2">SIGDE</span>
+        <span class="black--text letras mb-2">SIGDE</span>
       </div>
 
       <div>
@@ -32,13 +32,13 @@
             v-model="item.active"
             no-action
           >
-            <v-icon slot="prependIcon" medium color="white">{{
+            <v-icon slot="prependIcon" medium color="black">{{
               item.file
             }}</v-icon>
             <template v-slot:activator>
               <v-list-item-content>
                 <v-list-item-title
-                  class="white--text letras"
+                  class="black--text letras"
                   v-text="item.title"
                 ></v-list-item-title>
               </v-list-item-content>
@@ -47,7 +47,7 @@
             <v-list-item v-for="subItem in item.items" :key="subItem.title">
               <v-list-item-content @click="drawer = !drawer">
                 <router-link
-                  class="white--text caption"
+                  class="black--text caption"
                   style="text-decoration: none; color: inherit;"
                   :to="{ name: subItem.ruta }"
                   >{{ subItem.title }}</router-link
@@ -211,25 +211,50 @@ export default {
       tree: [],
       items: [
         {
-          file: "mdi-account-group",
-          title: "Transformadores",
-          items: [{ title: "Adm. Clientes", ruta: "AdmCliente" }],
-        },
-        {
-          file: "mdi-account-key",
-          title: "Usuarios",
-          items: [{ title: "Adm. Usuarios", ruta: "AdmUsuarios" }],
-        },
-        {
-          file: "mdi-cogs",
-          title: "Otros",
+          file: "mdi-pencil-ruler",
+          title: "Normativa",
           items: [
-            { title: "Agregar ARS", ruta: "AdmSeguros" },
-            { title: "Agregar Plan", ruta: "AdmPlan" },
-            { title: "Agregar Empresa", ruta: "AdmEmpresa" },
-            { title: "Agregar Referencia", ruta: "AdmReferencia" },
+          { title: "Evaluación de TR Nuevos", ruta: "EvaluacionTRNuevo" },
+          { title: "Evaluación de TR Intervenidos", ruta: "RetirarTRLinea" },
+          { title: "Mover Transformadores por Vale", ruta: "AdmCliente" }],
+        },
+        {
+          file: "mdi-tow-truck",
+          title: "Mantenimiento",
+          items: [{ title: "Generar Aviso", ruta: "GenerarAviso" },
+          { title: "Retirar Transformador", ruta: "RetirarTRLinea" },
+          { title: "Generar Vale", ruta: "AdmUsuarios" }],
+        },
+        {
+          file: "mdi-account-hard-hat",
+          title: "Obra",
+          items: [
+            { title: "Retirar Transformador de Obra", ruta: "RetirarTRObra" },
+           
           ],
         },
+        {
+          file: "mdi-cog-transfer",
+          title: "Control de Gestión",
+          items: [
+            { title: "Transferir Transformador", ruta: "TransferirTR" },
+           
+          ],
+        }, {
+          file: "mdi-database-refresh",
+          title: "BDI",
+          items: [
+            { title: "Actualizar Avisos", ruta: "EjecutarAviso" },
+           
+          ],
+        }, {
+          file: "mdi-cog",
+          title: "Otros",
+          items: [
+            { title: "Administrar Usuarios", ruta: "AdmSeguros" },
+           
+          ],
+        }
       ],
     };
   },
@@ -327,6 +352,6 @@ p {
 }
 .letras {
   font-family: Calibri;
-  font-size: 18px !important;
+  font-size: 14px !important;
 }
 </style>

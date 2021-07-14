@@ -25,6 +25,67 @@ const routes = [
         meta: { requireAuth: true },
       },
       {
+        path: "/EvaluacionTRNuevo",
+        name: "EvaluacionTRNuevo",
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () =>
+          import(
+            /* webpackChunkName: "about" */ "../views/Transformadores/EvaluacionTRNuevo.vue"
+          ),
+      },{
+        path: "/RetirarTRLinea",
+        name: "RetirarTRLinea",
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () =>
+          import(
+            /* webpackChunkName: "about" */ "../views/Transformadores/RetirarTRLinea.vue"
+          ),
+      },{
+        path: "/RetirarTRObra",
+        name: "RetirarTRObra",
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () =>
+          import(
+            /* webpackChunkName: "about" */ "../views/Transformadores/RetirarTRObra.vue"
+          ),
+      },{
+        path: "/TransferirTR",
+        name: "TransferirTR",
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () =>
+          import(
+            /* webpackChunkName: "about" */ "../views/Transformadores/TransferirTR.vue"
+          ),
+      },{
+        path: "/GenerarAviso",
+        name: "GenerarAviso",
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () =>
+          import(
+            /* webpackChunkName: "about" */ "../views/Avisos/GenerarAviso.vue"
+          ),
+      },{
+        path: "/EjecutarAviso",
+        name: "EjecutarAviso",
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () =>
+          import(
+            /* webpackChunkName: "about" */ "../views/Avisos/EjecutarAviso.vue"
+          ),
+      },
+      {
         path: "/AdmCliente",
         name: "AdmCliente",
         // route level code-splitting
