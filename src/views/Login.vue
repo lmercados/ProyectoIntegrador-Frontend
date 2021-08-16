@@ -1,18 +1,31 @@
 <template>
   <div class="body">
-    <v-row>
+    <v-row style="margin-top:40% opacity">
       <v-col cols="12" md="3" xs12 class="mx-auto">
-        <v-card style="margin-top:40%" class="opacity">
+      
           <v-row class="mx-4">
             <v-col cols="12" xs12 class="d-flex justify-center">
-              <p class="font-weight-bold">
+              <div>
+               <v-img
+                 src="../assets/flash.svg"
+                  max-height="50"
+                  max-width="50"
+                 ></v-img>
+
+              </div>
+            
+              
+            </v-col>
+
+            <v-col cols="12" xs12 class="d-flex justify-center">
+                    <p class="font-weight-bold">
                 SIGN IN TO SIGDE
               </p>
             </v-col>
           </v-row>
-          <v-divider></v-divider>
+            <v-card >
           <v-form ref="form" v-model="valid" lazy-validation>
-            <v-row class="ma-4 d-flex justify-center">
+            <v-row class="ma-4 d-flex justify-center ">
               <v-col cols="12" xs12>
                 <v-text-field
                   :rules="emailRules"
@@ -37,14 +50,19 @@
                   append-icon="mdi-key"
                 ></v-text-field>
               </v-col>
-
-              <v-btn
-                large
+                <v-col cols="12" xs12>
+                <v-btn
+                block
+                small
+                dark
                 color="success"
                 @click="login()"
                 class="white--text tipo mb-4"
                 >Sign In</v-btn
               >
+              
+              </v-col>
+             
             </v-row>
           </v-form>
         </v-card>

@@ -48,6 +48,7 @@
                     <v-text-field
                     outlined
                       label="Serie"
+                      v-model="data.serie"
                     ></v-text-field>
                   </v-col>
                   <v-col
@@ -58,6 +59,10 @@
                      <v-select
                          label="Propiedad"
                           outlined
+                          item-text="propiedad"
+                          item-value="propiedadId"
+                          :items="dataPropiedad"
+                          v-model="data.propiedad"
                       ></v-select>
                   </v-col>
                      <v-col
@@ -68,6 +73,11 @@
                      <v-select
                          label="Soporte"
                           outlined
+                            item-text="soporte"
+                          item-value="soporteId"
+                          :items="dataSoporte"
+                          v-model="data.soporte"
+                            @change="cargarTipoSoporte($event, data.soporte)"
                       ></v-select>
                   </v-col>
                      <v-col
@@ -78,6 +88,10 @@
                      <v-select
                          label="Tipo de Soporte"
                           outlined
+                           item-text="tipoSoporte"
+                          item-value="tipoSoporteId"
+                          :items="dataTipoSoporte"
+                          v-model="data.tipoSoporte"
                       ></v-select>
                   </v-col>
                      <v-col
@@ -88,6 +102,10 @@
                      <v-select
                          label="Fabricante"
                           outlined
+                          item-text="fabricante"
+                          item-value="fabricanteId"
+                          :items="dataFabricante"
+                          v-model="data.fabricante"
                       ></v-select>
                   </v-col>
                      <v-col
@@ -98,6 +116,11 @@
                      <v-select
                          label="Fases"
                           outlined
+                          item-text="fase"
+                          item-value="faseId"
+                          :items="dataFase"
+                          v-model="data.fase"
+                          @change="cargarCapacidad($event, data.fase)"
                       ></v-select>
                   </v-col> <v-col
                     cols="3"
@@ -107,6 +130,10 @@
                      <v-select
                          label="Capacidad"
                           outlined
+                           item-text="capacidad"
+                          item-value="capacidadId"
+                          :items="dataCapacidad"
+                          v-model="data.capacidad"
                       ></v-select>
                   </v-col>
                      <v-col
@@ -117,6 +144,10 @@
                      <v-select
                          label="Conexión TR"
                           outlined
+                           item-text="conexion"
+                          item-value="conexionId"
+                          :items="dataConexion"
+                          v-model="data.conexion"
                       ></v-select>
                   </v-col>
                    <v-col
@@ -127,6 +158,10 @@
                      <v-select
                          label="Tensión Primaria"
                           outlined
+                          item-text="tension"
+                          item-value="tensionPrimariaId"
+                          :items="dataTensionPrimaria"
+                          v-model="data.tensionPrimaria"
                       ></v-select>
                   </v-col>
                      <v-col
@@ -137,6 +172,10 @@
                      <v-select
                          label="Tensión Secundaria"
                           outlined
+                           item-text="tension"
+                          item-value="tensionSecundariaId"
+                          :items="dataTensionSecundaria"
+                          v-model="data.tensionSecundaria"
                       ></v-select>
                   </v-col>
                    <v-col
@@ -147,6 +186,10 @@
                      <v-select
                          label="Regulación"
                           outlined
+                          item-text="regulacion"
+                          item-value="regulacionId"
+                          :items="dataRegulacion"
+                          v-model="data.regulacion"
                       ></v-select>
                   </v-col>
                      <v-col
@@ -157,6 +200,7 @@
                     <v-text-field
                     outlined
                       label="Impedancia"
+                      v-model="data.impedancia"
                     ></v-text-field>
                   </v-col>
                           <v-col cols="12" xs="12" md="12">
@@ -164,6 +208,7 @@
                             append-icon="mdi-comment"
                             class="mx-2"
                             label="Observación"
+                             v-model="data.observacion"
                            rows="1"
                        ></v-textarea>
                     </v-col>
@@ -171,7 +216,23 @@
              
               </v-container>
             </v-card-text>
-
+                  <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn
+                color="red darken-1"
+                text
+                @click="close()"
+              >
+                Cancel
+              </v-btn>
+              <v-btn
+                color="blue darken-1"
+                text
+                @click="save()"
+              >
+                Save
+              </v-btn>
+            </v-card-actions>
           </v-card>
         </v-dialog>
         <v-dialog v-model="dialogDelete" max-width="500px">
@@ -212,6 +273,85 @@ export default {
   data: () => ({
      e1: 1,
     loading: true,
+    dialog:false,
+    dialogDelete:false,
+    dataPropiedad:[],
+    dataSoporte:[],
+    dataTipoSoporte:[],
+    dataFabricante:[],
+    dataFase:[],
+    dataCapacidad:[],
+    dataConexion:[],
+    dataTensionPrimaria:[],
+    dataTensionSecundaria:[],
+    dataRegulacion:[],
+    dataDefault:{
+    serie:"",
+    propiedad:0,
+    soporte:0,
+    tipoSoporte:0,
+    fabricante:0,
+    fase:0,
+    capacidad:0,
+    conexion:0,
+    tensionPrimaria:0,
+    tensionSecundaria:0,
+    regulacion:0,
+    impedancia:0,
+    observacion:"",
+    licitacion:"",
+    efecto:12,
+    suplidor:6,
+    valoracion:5,
+    razonesRechazo:5,
+    tipoReparacion:4,
+    usuario:3,
+    codigoProyecto:3,
+    codigoSap:5,
+    psc:0,
+    pcc:0,
+    perdida:0,
+    perdidaTotal:0,
+    voltajeCC:0,
+    corriente:0,
+    matricula:"",
+    estado:11,
+    ubicacion:15
+    },
+    data:{
+    serie:"",
+    sello:"",
+    propiedad:0,
+    soporte:0,
+    tipoSoporte:0,
+    fabricante:0,
+    fase:0,
+    capacidad:0,
+    conexion:0,
+    tensionPrimaria:0,
+    tensionSecundaria:0,
+    regulacion:0,
+    impedancia:0,
+    observacion:"",
+    licitacion:"",
+    efecto:12,
+    suplidor:6,
+    valoracion:5,
+    razonesRechazo:5,
+    tipoReparacion:4,
+    usuario:3,
+    codigoProyecto:3,
+    codigoSap:5,
+    psc:0,
+    pcc:0,
+    perdida:0,
+    perdidaTotal:0,
+    voltajeCC:0,
+    corriente:0,
+    matricula:"",
+    estado:11,
+    ubicacion:15
+    },
     headers: [
       {
         text: "SERIE",
@@ -263,7 +403,6 @@ export default {
       }
     ],
     editedIem:{},
-    data: [],
     editedIndex: -1
     
   }),
@@ -279,10 +418,229 @@ export default {
   },
 
   created() {
- 
+   this.cargarPropiedad();
+   this.cargarSoporte();
+   this.cargarFabricantes();
+   this.cargarFases();
+   this.cargarTensionPrimaria();
+   this.cargarTensionSecundaria();
+   this.cargarRegulacion();
   },
 
   methods: {
+      close () {
+        this.dialog = false
+        this.$nextTick(() => {
+          this.data = Object.assign({}, this.dataDefault)
+        
+        })
+      },
+
+    save(){
+    this.data.sello=this.data.serie;
+    
+    this.axios
+        .post("/transformador/create", this.data)
+        .then((res) => {
+          if (res.status == 201) {
+               console.log(res.data);
+          } else {
+               console.log("error");
+          }
+        })
+        .catch((err) => {
+                  console.log(err);
+        });
+        
+
+    },
+    cargarPropiedad(){
+      this.dataPropiedad = [];
+      this.axios
+        .get("/propiedad")
+        .then((res) => {
+          if (res.data.length > 0) {
+            this.dataPropiedad = res.data;
+            
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
+    },
+       cargarSoporte(){
+      this.dataSoporte = [];
+      this.axios
+        .get("/soportes")
+        .then((res) => {
+          if (res.data.length > 0) {
+            this.dataSoporte = res.data;
+            
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+        
+
+    },
+       cargarFabricantes(){
+      this.dataFabricante = [];
+      this.axios
+        .get("/fabricante")
+        .then((res) => {
+          if (res.data.length > 0) {
+            this.dataFabricante = res.data;
+            
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+        
+
+    },
+       cargarFases(){
+      this.dataFase = [];
+      this.axios
+        .get("/fases")
+        .then((res) => {
+          if (res.data.length > 0) {
+            this.dataFase = res.data;
+            
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+        
+
+    },
+       cargarTensionPrimaria(){
+      this.dataTensionPrimaria = [];
+      this.axios
+        .get("/tension-primaria")
+        .then((res) => {
+          if (res.data.length > 0) {
+            this.dataTensionPrimaria = res.data;
+            
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+        
+
+    },
+    cargarTensionSecundaria(){
+      this.dataTensionSecundaria = [];
+      this.axios
+        .get("/tension-secundaria")
+        .then((res) => {
+          if (res.data.length > 0) {
+            this.dataTensionSecundaria = res.data;
+            
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+        
+
+    },
+    cargarRegulacion(){
+      this.dataRegulacion = [];
+      this.axios
+        .get("/regulacion")
+        .then((res) => {
+          if (res.data.length > 0) {
+            this.dataRegulacion = res.data;
+            
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+        
+
+    }, cargarTipoSoporte(soporteId){
+      this.dataTipoSoporte = [];
+      this.axios
+        .get( `/soporte-tipo-soporte/soporte/${soporteId}`)
+        .then((res) => {
+          if (res.data.length > 0) {
+            for (const i in res.data) {
+                if (res.data.hasOwnProperty.call(res.data, i)) {
+            
+                   
+                   this.dataTipoSoporte.push(res.data[i].tipoSoporteId);
+                   
+                  
+                }
+              }
+            
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+        
+
+    },
+    cargarCapacidad(faseId){
+
+      this.dataCapacidad = [];
+      this.dataConexion =[];
+      this.axios
+        .get( `/fase-capacidad/fase/${faseId}`)
+        .then((res) => {
+          if (res.data.length > 0) {
+             
+
+              for (const i in res.data) {
+                if (res.data.hasOwnProperty.call(res.data, i)) {
+            
+                   
+                   this.dataCapacidad.push(res.data[i].capacidadId);
+                   
+                  
+                }
+              }
+               
+         
+            
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+        
+      this.axios
+        .get( `/fase-conexion/fase/${faseId}`)
+        .then((res) => {
+          if (res.data.length > 0) {
+  
+
+              for (const i in res.data) {
+                if (res.data.hasOwnProperty.call(res.data, i)) {
+            
+                   
+                   this.dataConexion.push(res.data[i].conexionId);
+                   
+                  
+                }
+              }
+               
+         
+            
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+
    
    
   },

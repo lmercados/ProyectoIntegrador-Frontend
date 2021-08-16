@@ -7,11 +7,14 @@ export default new Vuex.Store({
     state: {
         dataFactura: [],
         dataCliente: {
-            nombre: '',
-            cedula: ''
+            nombre: 'Luis Mercado',
+            cedula: '402-11296518'
         },
-        token: '',
-        usuarioDB: '',
+        token: 'sdcsdc',
+        usuarioDB: {
+            nombre: 'Luis Mercado',
+            cedula: '402-11296518'
+        },
         verFactura: false
 
 

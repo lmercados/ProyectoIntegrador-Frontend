@@ -12,7 +12,7 @@ Vue.component("downloadExcel", JsonExcel);
 Vue.use(VueSimpleAlert);
 Vue.use(VueAxios, axios);
 //axios.defaults.baseURL = 'https://seguros-app.herokuapp.com/api/';
-axios.defaults.baseURL = "http://localhost:3000/api/";
+axios.defaults.baseURL = "http://localhost:5000/api/";
 //axios.defaults.baseURL = 'https://seguros-app.herokuapp.com/api/';
 Vue.config.productionTip = false;
 new Vue({
