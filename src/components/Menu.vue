@@ -117,7 +117,7 @@
                     :type="show1 ? 'text' : 'password'"
                     name="input-10-1"
                     @click:append="show1 = !show1"
-                    :rules="Rules"
+                    :rules="textRules"
                     required
                     v-model="editedItem.password"
                   ></v-text-field>
@@ -129,7 +129,7 @@
                     :type="show1 ? 'text' : 'password'"
                     name="input-10-1"
                     @click:append="show1 = !show1"
-                    :rules="Rules"
+                    :rules="textRules"
                     required
                     v-model="editedItem.newPassword"
                   ></v-text-field>
@@ -142,7 +142,7 @@
                     :type="show1 ? 'text' : 'password'"
                     name="input-10-1"
                     @click:append="show1 = !show1"
-                    :rules="Rules"
+                    :rules="textRules"
                     required
                     v-model="editedItem.repeatPassword"
                   ></v-text-field>

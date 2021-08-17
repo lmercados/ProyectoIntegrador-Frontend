@@ -4,6 +4,7 @@
     :headers="headers"
     sort-by="calories"
     class="elevation-1 ma-4"
+      :items="datos"
   >
     <template v-slot:top>
       <v-toolbar
@@ -32,6 +33,7 @@
             </v-btn>
           </template>
           <v-card>
+              <v-form ref="form" v-model="valid" lazy-validation>
             <v-card-title>
               <span class="text-h5 blue--text">{{ formTitle }}</span>
             </v-card-title>
@@ -49,6 +51,7 @@
                     outlined
                       label="Serie"
                       v-model="data.serie"
+                      :rules="textRules"
                     ></v-text-field>
                   </v-col>
                   <v-col
@@ -63,6 +66,7 @@
                           item-value="propiedadId"
                           :items="dataPropiedad"
                           v-model="data.propiedad"
+                          :rules="selectRules"
                       ></v-select>
                   </v-col>
                      <v-col
@@ -72,6 +76,7 @@
                   >
                      <v-select
                          label="Soporte"
+                                 :rules="selectRules"
                           outlined
                             item-text="soporte"
                           item-value="soporteId"
@@ -92,6 +97,7 @@
                           item-value="tipoSoporteId"
                           :items="dataTipoSoporte"
                           v-model="data.tipoSoporte"
+                                :rules="selectRules"
                       ></v-select>
                   </v-col>
                      <v-col
@@ -106,6 +112,7 @@
                           item-value="fabricanteId"
                           :items="dataFabricante"
                           v-model="data.fabricante"
+                                :rules="selectRules"
                       ></v-select>
                   </v-col>
                      <v-col
@@ -114,6 +121,7 @@
                     md="3"
                   >
                      <v-select
+                            :rules="selectRules"
                          label="Fases"
                           outlined
                           item-text="fase"
@@ -134,6 +142,7 @@
                           item-value="capacidadId"
                           :items="dataCapacidad"
                           v-model="data.capacidad"
+                          :rules="selectRules"
                       ></v-select>
                   </v-col>
                      <v-col
@@ -148,6 +157,7 @@
                           item-value="conexionId"
                           :items="dataConexion"
                           v-model="data.conexion"
+                                 :rules="selectRules"
                       ></v-select>
                   </v-col>
                    <v-col
@@ -162,6 +172,7 @@
                           item-value="tensionPrimariaId"
                           :items="dataTensionPrimaria"
                           v-model="data.tensionPrimaria"
+                                 :rules="selectRules"
                       ></v-select>
                   </v-col>
                      <v-col
@@ -176,6 +187,7 @@
                           item-value="tensionSecundariaId"
                           :items="dataTensionSecundaria"
                           v-model="data.tensionSecundaria"
+                             :rules="selectRules"
                       ></v-select>
                   </v-col>
                    <v-col
@@ -190,6 +202,7 @@
                           item-value="regulacionId"
                           :items="dataRegulacion"
                           v-model="data.regulacion"
+                               :rules="selectRules"
                       ></v-select>
                   </v-col>
                      <v-col
@@ -201,6 +214,7 @@
                     outlined
                       label="Impedancia"
                       v-model="data.impedancia"
+                      :rules="textRules"
                     ></v-text-field>
                   </v-col>
                           <v-col cols="12" xs="12" md="12">
@@ -213,7 +227,7 @@
                        ></v-textarea>
                     </v-col>
                 </v-row>
-             
+           
               </v-container>
             </v-card-text>
                   <v-card-actions>
@@ -226,6 +240,7 @@
                 Cancel
               </v-btn>
               <v-btn
+               :disabled="!valid"
                 color="blue darken-1"
                 text
                 @click="save()"
@@ -233,6 +248,7 @@
                 Save
               </v-btn>
             </v-card-actions>
+               </v-form>
           </v-card>
         </v-dialog>
         <v-dialog v-model="dialogDelete" max-width="500px">
@@ -268,10 +284,14 @@
 </template>
 
 <script>
-
+import validaciones from "@/missing/Validaciones";
+import alertas from "@/missing/Alertas";
 export default {
+   mixins: [validaciones,alertas],
   data: () => ({
-     e1: 1,
+    datos:[],
+    valid:true,
+    e1: 1,
     loading: true,
     dialog:false,
     dialogDelete:false,
@@ -356,50 +376,55 @@ export default {
       {
         text: "SERIE",
         align: "center",
-        value: "serie",
+        value: "serie"
       },
       {
         text: "SOPORTE",
-        value: "soporte",
+        value: "soporte.soporte",
       
-        align: "center",
+        align: "center"
       },
       {
         text: "TIPO SOPORTE",
-        value: "tipoSoporte",
+        value: "tipoSoporte.tipoSoporte",
    
-        align: "center",
+        align: "center"
       },
       {
         text: "FABRICANTE",
-        value: "fabricante",
+        value: "fabricante.fabricante",
        
-        align: "center",
+        align: "center"
       },
       {
         text: "FASES",
-        value: "fase",
+        value: "fase.fase",
      
-        align: "center",
+        align: "center"
       },
 
       {
         text: "CAPACIDAD",
-        value: "capacidad",
+        value: "capacidad.capacidad",
        
-        align: "center",
+        align: "center"
       },
       {
         text: "ESTADO",
-        value: "estado",
+        value: "estado.estado",
       
-        align: "center",
+        align: "center"
       },
       {
         text: "UBICACIÓN",
-        value: "ubicacion",
-
-        align: "center",
+        value: "ubicacion.ubicacion",
+        align: "center"
+       
+      },
+      {
+        text: "ACCI{ON",
+        value: "efecto.efecto",
+       align: "center"
       }
     ],
     editedIem:{},
@@ -414,7 +439,9 @@ export default {
   },
 
   watch: {
-    
+      dialog (val) {
+        val || this.close()
+      }
   },
 
   created() {
@@ -437,20 +464,35 @@ export default {
       },
 
     save(){
-    this.data.sello=this.data.serie;
-    
-    this.axios
+
+
+     if(this.$refs.form.validate()==false)
+      {
+          return ;
+      }else
+      
+      {
+            this.data.sello=this.data.serie;
+            this.axios
         .post("/transformador/create", this.data)
         .then((res) => {
           if (res.status == 201) {
-               console.log(res.data);
+            this.datos.push(res.data);
+            //console.log(JSON.stringify(res.data));
+              this.alertSave({mensaje:"Transformador Registrado Correctamente",dialog:this.dialog});
+              this.close();
           } else {
-               console.log("error");
+               this.alertError({mensaje:"Ha ocurrido un error al Intentar agregar este Transformador"});
           }
         })
         .catch((err) => {
-                  console.log(err);
+           this.alertError({mensaje:"Ha ocurrido un error al Intentar agregar este Transformador"});
+          console.log(err);
         });
+
+      }
+     
+     
         
 
     },
@@ -639,7 +681,14 @@ export default {
         .catch((err) => {
           console.log(err);
         });
-    }
+    },
+       close () {
+        this.dialog = false
+        this.$nextTick(() => {
+          this.data = Object.assign({}, this.dataDefault)
+        });
+        this.$refs.form.resetValidation();
+      }
 
    
    

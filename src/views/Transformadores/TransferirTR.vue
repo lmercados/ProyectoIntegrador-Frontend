@@ -4,6 +4,7 @@
     :headers="headers"
     sort-by="calories"
     class="elevation-1 ma-4"
+    :items="datos"
   >
     <template v-slot:top>
       <v-toolbar
@@ -38,7 +39,7 @@
 
             <v-card-text>
               <v-container>
-              
+                <v-form ref="form" v-model="valid" lazy-validation>
                     <v-row>
                   <v-col
                     cols="12"
@@ -47,7 +48,9 @@
                   >
                     <v-text-field
                     outlined
-                      label="Digite la Serie a Transferir"
+                    label="Digite la Serie a Transferir"
+                    v-model="serie"
+                    v-on:keyup.enter="findBySerie(serie)"
                     ></v-text-field>
                   </v-col>
                     <v-col
@@ -56,9 +59,10 @@
                     md="4"
                   >
                     <v-text-field
-                    disabled
                     outlined
-                      label="Capacidad"
+                    readonly
+                    label="Capacidad"
+                    v-model="capacidad"
                     ></v-text-field>
                   </v-col>
                     <v-col
@@ -67,9 +71,11 @@
                     md="4"
                   >
                     <v-text-field
-                    disabled
+                    
+                    readonly
                     outlined
                       label="Fabricante"
+                      v-model="fabricante"
                     ></v-text-field>
                   </v-col>
                    <v-col
@@ -78,9 +84,10 @@
                     md="4"
                   >
                     <v-text-field
-                    disabled
+                    readonly
                     outlined
                       label="Fases"
+                      v-model="fase"
                     ></v-text-field>
                   </v-col> 
                     <v-col
@@ -89,9 +96,10 @@
                     md="4"
                   >
                     <v-text-field
-                    disabled
+                    readonly
                     outlined
                       label="Soporte"
+                     v-model="soporte"
                     ></v-text-field>
                   </v-col>
                     <v-col
@@ -100,9 +108,10 @@
                     md="4"
                   >
                     <v-text-field
-                    disabled
+                    readonly
                     outlined
                       label="Estado Actual"
+                     v-model="estado"
                     ></v-text-field>
                   </v-col>
                    <v-col
@@ -111,9 +120,10 @@
                     md="4"
                   >
                     <v-text-field
-                    disabled
+                    readonly
                     outlined
-                      label="Ubicación Actual"
+                    label="Ubicación Actual"
+                     v-model="ubicacion"
                     ></v-text-field>
                   </v-col>
                     <v-col
@@ -124,6 +134,11 @@
                      <v-select
                          label="Propiedad"
                           outlined
+                            item-text="propiedad"
+                         item-value="propiedadId"
+                        :items="dataPropiedad"
+                       v-model="data.propiedad"
+                     :rules="selectRules"
                       ></v-select>
                   </v-col>
                      <v-col
@@ -133,26 +148,31 @@
                   >
                      <v-select
                          label="Enviar a :"
-                          outlined
+                         outlined
+                         item-text="ubicacion"
+                         item-value="ubicacionId"
+                         :items="dataUbicacion"
+                         v-model="data.ubicacion"
+                         :rules="selectRules"
                       ></v-select>
                   </v-col>
                 </v-row>
-                
+                  </v-form>
               </v-container>
             </v-card-text>
               <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn
-                color="blue darken-1"
+                color="red darken-1"
                 text
-                @click="close"
+                @click="close()"
               >
                 Cancel
               </v-btn>
               <v-btn
                 color="blue darken-1"
                 text
-                @click="save"
+                @click="save()"
               >
                 Save
               </v-btn>
@@ -165,7 +185,7 @@
             <v-card-title class="text-h5">Estás seguro que deseas eliminar este Item?</v-card-title>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text>Cancel</v-btn>
+              <v-btn color="red darken-1" text>Cancel</v-btn>
               <v-btn color="blue darken-1" text >OK</v-btn>
               <v-spacer></v-spacer>
             </v-card-actions>
@@ -193,63 +213,93 @@
 </template>
 
 <script>
-
+import validaciones from "@/missing/Validaciones";
+import alertas from "@/missing/Alertas";
 export default {
+  mixins: [validaciones,alertas],
   data: () => ({
+    dataPropiedad:[],
+    dataUbicacion:[],
+    datos:[],
+    valid:true,
+    e1: 1,
+    loading: true,
+    dialog:false,
+    dialogDelete:false,
+    ubicacion:"",
+    capacidad:"",
+    fabricante:"",
+    fase:"",
+    soporte:"",
+    estado:"",
+    estadoId:0,
+    serie:"",
+    data:{
+         transformadorId:0,
+         ubicacion:"",
+         propiedad:0,
+         efecto:11,
+         usuario:3
+
+    },
      e1: 1,
     loading: true,
     headers: [
       {
         text: "SERIE",
         align: "center",
-        value: "serie",
+        value: "serie"
       },
       {
         text: "SOPORTE",
-        value: "soporte",
+        value: "soporte.soporte",
       
-        align: "center",
+        align: "center"
       },
       {
         text: "TIPO SOPORTE",
-        value: "tipoSoporte",
+        value: "tipoSoporte.tipoSoporte",
    
-        align: "center",
+        align: "center"
       },
       {
         text: "FABRICANTE",
-        value: "fabricante",
+        value: "fabricante.fabricante",
        
-        align: "center",
+        align: "center"
       },
       {
         text: "FASES",
-        value: "fase",
+        value: "fase.fase",
      
-        align: "center",
+        align: "center"
       },
 
       {
         text: "CAPACIDAD",
-        value: "capacidad",
+        value: "capacidad.capacidad",
        
-        align: "center",
+        align: "center"
       },
       {
         text: "ESTADO",
-        value: "estado",
+        value: "estado.estado",
       
-        align: "center",
+        align: "center"
       },
       {
         text: "UBICACIÓN",
-        value: "ubicacion",
-
-        align: "center",
+        value: "ubicacion.ubicacion",
+        align: "center"
+       
+      },
+      {
+        text: "ACCION",
+        value: "efecto.efecto",
+       align: "center"
       }
     ],
     editedIem:{},
-    data: [],
     editedIndex: -1
     
   }),
@@ -265,14 +315,117 @@ export default {
   },
 
   created() {
- 
+     this.cargarUbicacion();
+     this.cargarPropiedad();
+    
   },
 
   methods: {
+
+    save(){
+     if(this.estadoId==11)
+      {
+        this.alertError({mensaje:"Este Transformador se encuentra En Línea y Funcionamiento"});
+        return ;
+      }
+        if(this.$refs.form.validate()==false)
+      {
+          return ;
+      }else
+      {
+       this.axios.put(
+          `/transformador/estado-ubicacion/${this.data.transformadorId}`,
+          this.data
+        )
+        .then((res) => {
+           console.log(res)
+          if (res.status == 200) {
+              this.datos.push(res.data);
+              this.alertSave({mensaje:"Transformador Transferido Correctamente",dialog:this.dialog});
+              this.close();
+          } else {
+               this.alertError({mensaje:"Ha ocurrido un error al Intentar Transferir este Transformador"});
+          }
+        })
+        .catch((err) => {
+           this.alertError({mensaje:"Ha ocurrido un error al Intentar Transferir este Transformador"});
+           console.log(err);
+        });
+
+     }
+  
+
+
+
+    },
+      close () {
+        this.dialog = false
+      
+      },
+   cargarUbicacion(){
+      this.dataUbicacion = [];
+      this.axios
+        .get("/ubicacion")
+        .then((res) => {
+          if (res.data.length > 0) {
+            this.dataUbicacion = res.data;
+            
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
+    },cargarPropiedad(){
+      this.dataPropiedad = [];
+      this.axios
+        .get("/propiedad")
+        .then((res) => {
+          if (res.data.length > 0) {
+            this.dataPropiedad = res.data;
+            
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
+    },findBySerie(serie){
    
+      this.axios
+        .get(`/transformador/serie/${serie}`)
+        .then((res) => {
+         
+          if (res.status==200) {
+               
+              this.data.transformadorId=res.data.transformadorId;
+              this.capacidad=res.data.capacidad.capacidad;
+              this.fabricante=res.data.fabricante.fabricante;
+              this.fase=res.data.fase.fase;
+              this.soporte=res.data.soporte.soporte;
+              this.estado=res.data.estado.estado;
+              this.ubicacion=res.data.ubicacion.ubicacion;
+              this.estadoId=res.data.estado.estadoId;
+             
+                 
+               
+             
+           }
+     
+           
+          
+        })
+        .catch((err) => {
+         
+                this.alertError({mensaje:"Transfomador Inexistente"});
+        });
+        
+
+    
    
-  },
-};
+  }
+}
+}
 </script>
 <style scoped>
 .panel2 {
