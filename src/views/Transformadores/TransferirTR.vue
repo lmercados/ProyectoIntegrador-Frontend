@@ -45,6 +45,7 @@
                     cols="12"
                     sm="12"
                     md="12"
+              
                   >
                     <v-text-field
                     outlined
@@ -236,7 +237,8 @@ export default {
     serie:"",
     data:{
          transformadorId:0,
-         ubicacion:"",
+         estado:0,
+         ubicacion:0,
          propiedad:0,
          efecto:11,
          usuario:3
@@ -399,6 +401,7 @@ export default {
           if (res.status==200) {
                
               this.data.transformadorId=res.data.transformadorId;
+              this.data.estado=res.data.estado.estadoId;
               this.capacidad=res.data.capacidad.capacidad;
               this.fabricante=res.data.fabricante.fabricante;
               this.fase=res.data.fase.fase;

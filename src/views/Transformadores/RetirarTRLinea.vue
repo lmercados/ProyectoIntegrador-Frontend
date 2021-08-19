@@ -477,8 +477,7 @@ export default {
         .post("/transformador/create", this.data)
         .then((res) => {
           if (res.status == 201) {
-            this.datos.push(res.data);
-            //console.log(JSON.stringify(res.data));
+              this.datos.push(res.data);
               this.alertSave({mensaje:"Transformador Registrado Correctamente",dialog:this.dialog});
               this.close();
           } else {
